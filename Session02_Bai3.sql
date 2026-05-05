@@ -1,0 +1,26 @@
+DROP DATABASE IF EXISTS session02;
+CREATE DATABASE session02;
+USE session02;
+
+CREATE TABLE CUSTOMERS (
+    customerID INT PRIMARY KEY AUTO_INCREMENT,
+    fullName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    age INT CHECK (age > 0)
+);
+
+CREATE TABLE ORDERS (
+    orderID INT PRIMARY KEY AUTO_INCREMENT,
+    orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    totalAmount DECIMAL(18, 2) NOT NULL,
+    customerID INT,
+    FOREIGN KEY (customerID) REFERENCES CUSTOMERS(customerID)
+);
+
+/*
+Tên cột    |  Kiểu dữ liệu  |  Ràng buộc
+orderID      int				PRIMARY KEY AUTO_INCREMENT
+orderDate	 DATETIME			DEFAULT CURRENT_TIMESTAMP
+totalAmount  DECIMAL			NOT NULL
+customerID   INT				FOREIGN KEY
+*/

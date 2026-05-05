@@ -1,0 +1,47 @@
+DROP DATABASE IF EXISTS session02;
+CREATE DATABASE session02;
+USE session02;
+
+/*
+Kịch bản rủi ro:
+- Số tiền dư âm
+- Ví lậu
+- Giao dịch quá số dư
+*/
+CREATE TABLE USERS (
+    userID INT PRIMARY KEY AUTO_INCREMENT,
+    userName VARCHAR(50) NOT NULL,
+    phone INT
+);
+
+CREATE TABLE CUSTOMERS (
+    customerID INT PRIMARY KEY AUTO_INCREMENT,
+    fullName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    age INT CHECK (age > 0)
+);
+
+CREATE TABLE ORDERS (
+    orderID INT PRIMARY KEY AUTO_INCREMENT,
+    orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    totalAmount DECIMAL(18, 2) NOT NULL,
+    customerID INT,
+    FOREIGN KEY (customerID) REFERENCES CUSTOMERS(customerID)
+);
+
+CREATE TABLE WALLETS (
+    walletID INT PRIMARY KEY AUTO_INCREMENT,
+    customerID INT NOT NULL UNIQUE,
+    balance DECIMAL(18, 2) CHECK (balance >= 0),
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customerID) REFERENCES CUSTOMERS(customerID)
+);
+
+CREATE TABLE TRANSACTIONS (
+    transactionID INT PRIMARY KEY AUTO_INCREMENT,
+    walletID INT NOT NULL,
+    amount DECIMAL(18, 2) CHECK (amount > 0),
+    status ENUM('DONE', 'FAILED', 'WAIT') DEFAULT 'WAIT',
+    transDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (walletID) REFERENCES WALLETS(walletID)
+);
